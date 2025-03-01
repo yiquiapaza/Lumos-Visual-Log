@@ -1,0 +1,370 @@
+/** Paddings */
+.p-xs {
+  padding: 4px;
+}
+.p-sm {
+  padding: 8px;
+}
+.p-0 {
+  padding: 0px !important;
+}
+
+/** Margins */
+.m-xs {
+  margin: 4px;
+}
+.m-sm {
+  margin: 8px;
+}
+.mb-sm {
+  margin-bottom: 8px;
+}
+.m-0 {
+  margin: 0px !important;
+}
+.m-b-0 {
+  margin-bottom: 0px !important;
+}
+.m-t-sm {
+  margin-top: 8px !important;
+}
+.m-t-md {
+  margin-top: 16px !important;
+}
+.m-b-md {
+  margin-bottom: 16px !important;
+}
+
+/** Multiple COLUMNS and ROWS */
+.h-full {
+  height: calc(100vh - 55px) !important;
+}
+.w-100 {
+  width: 100% !important;
+}
+.h-100 {
+  height: 100% !important;
+}
+.border-light {
+  border: 1px solid #dddddd !important;
+  border-radius: 3px;
+}
+.text-nowrap {
+  white-space: nowrap;
+}
+.list-group-item {
+  border: none;
+  padding: 10px;
+}
+.list-group-item .title {
+  margin-top: 5px;
+  margin-bottom: 12px;
+  font-weight: 400;
+  color: black;
+}
+
+/** Color Legend */
+.sequential-color-legend {
+  height: 12px;
+  border-radius: 3px;
+  background-image: linear-gradient(to right, #eeeeee, #42a5f5);
+}
+.divergent-color-legend {
+  height: 12px;
+  border-radius: 3px;
+  background-image: linear-gradient(to right, #ef9a9a, #eeeeee, #a5d6a7);
+}
+
+/** ROW: Multiple Headers */
+.title {
+  font-weight: 500 !important;
+}
+
+/** ROW: Multiple Buttons */
+.float-right {
+  float: right;
+}
+
+/** ROW: Encodings */
+.display-inline {
+  display: inline-block;
+}
+
+/** ROW: Filters */
+.q-filter-slider nouislider {
+  margin-top: 3em;
+  margin-bottom: 2.5em;
+  margin-left: 5%;
+  width: 90%;
+  font-size: 0.8em;
+}
+
+/** ROW: Selected Objects */
+.single-table {
+  padding: 0.25em 1.25em 0 1.25em;
+}
+.single-table > *:first-child {
+  padding: 0px; // remove left padding on first child
+}
+.single-table > *:last-child {
+  border-right: 0px; // remove divider of last child
+}
+.attr-col {
+  padding: 0 0 0 1%;
+  border-right: 2px solid#dddddd;
+}
+.attr-col > table {
+  width: 98%; // leave small gap
+}
+.attr-row {
+  border-bottom: 1px solid #dddddd;
+}
+.attr-row:last-child {
+  border: 0px;
+}
+.attr-row:hover {
+  background-color: #dddddd !important;
+}
+.attr-row > td {
+  border: 0px;
+  padding: 0 0.4em 0 0.2em !important;
+}
+
+.group-table {
+  font-size: 0.9em;
+  text-align: center;
+}
+.group-table > table {
+  border-collapse: collapse;
+  position: relative;
+}
+.group-table-item:hover {
+  color: black !important;
+  background-color: #dddddd !important;
+}
+.group-table-header > th {
+  background-color: white;
+  top: 0; /* Don't forget this, required for the stickiness */
+  position: sticky;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+.group-table-header > th,
+.group-table-item > td {
+  padding: 0 0.25em;
+  border-right: 1px solid #dddddd;
+}
+.group-table-header > th:last-child,
+.group-table-item > td:last-child {
+  border-right: 0px; // remove divider of last child
+}
+
+/** COLUMN: Awareness Panel */
+.card {
+  border: 0px;
+}
+.card-border {
+  border: 1px solid #333333;
+}
+.card-header {
+  background-color: white;
+  border-bottom: 0;
+  padding: 4px;
+}
+.card-header-hover:hover {
+  // background: #efefef !important;
+  cursor: pointer;
+}
+
+/** CSS for dynamic DOM elements */
+::ng-deep {
+  body {
+    overflow: hidden !important;
+  }
+
+  .selected {
+    stroke: black;
+  }
+
+  .selected-item {
+    border-radius: 6px !important;
+    background: #999 !important;
+    border: 1px solid #ccc !important;
+    margin-bottom: 4px !important;
+    font-size: 0.9rem;
+  }
+
+  .dropdown-down,
+  .dropdown-up {
+    border-left: 6px solid transparent !important;
+    border-right: 6px solid transparent !important;
+  }
+
+  .dropdown-down {
+    border-top: 8px solid #999 !important;
+  }
+
+  .dropdown-up {
+    border-bottom: 8px solid #999 !important;
+  }
+
+  .multiselect-item-checkbox input[type="checkbox"] + div:before {
+    border: 2px solid #999 !important;
+  }
+
+  .multiselect-item-checkbox input[type="checkbox"]:checked + div:before {
+    background: #999 !important;
+  }
+
+  .noUi-target {
+    height: 5px !important;
+  }
+
+  .noUi-base:hover {
+    cursor: pointer;
+  }
+
+  .noUi-connect {
+    height: 5px !important;
+    background: #999 !important;
+  }
+
+  .noUi-connect:hover {
+    cursor: pointer;
+  }
+
+  .noUi-handle {
+    width: 15px !important;
+    height: 20px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .noUi-handle:hover {
+    cursor: pointer;
+  }
+
+  .noUi-horizontal .noUi-handle {
+    top: -9px !important;
+    right: -8px !important;
+  }
+
+  .noUi-tooltip {
+    padding: 2px;
+    background: #999;
+    border: 1px solid #ccc;
+    color: white;
+  }
+
+  .noUi-tooltip:hover {
+    cursor: pointer;
+  }
+
+  .noUi-handle:after,
+  .noUi-handle:before {
+    display: none;
+  }
+
+  .noUi-pips-horizontal {
+    padding: 4px;
+  }
+
+  .noUi-value-large {
+    top: 0px !important;
+  }
+
+  .noUi-marker-large {
+    height: 8px !important;
+  }
+
+  /** Task Configuration Vis */
+  .taskConfigVis .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+  }
+  .taskConfigVis circle {
+    fill: steelblue;
+    fill-opacity: 1;
+    stroke-width: 1.5px;
+    cursor: move;
+  }
+  .taskConfigVis .tick line {
+    stroke: #eeeeee;
+  }
+
+  /** Plot */
+  .unsupported-text {
+    font-size: 1.1em;
+    font-weight: 500 !important;
+  }
+  .post text {
+    font-size: 0.7em;
+    font-weight: 800 !important;
+  }
+  .tick text,
+  .tick text {
+    font-size: 0.9em;
+  }
+  .x.axis.title text,
+  .y.axis.title text {
+    font-size: 1.15em;
+    font-weight: 800 !important;
+  }
+  .legend text {
+    font-size: 0.8em;
+    font-weight: 800 !important;
+  }
+
+  .deviant-scrollbars > .os-scrollbar-horizontal {
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: 10;
+    height: 12px;
+  }
+  .deviant-scrollbars > .os-scrollbar-vertical {
+    left: 0;
+    bottom: 0;
+    right: auto;
+    top: 10;
+    width: 12px;
+  }
+
+  .deviant-scrollbars.os-host-scrollbar-horizontal-hidden > .os-scrollbar-vertical {
+    top: 0;
+  }
+
+  .deviant-scrollbars.os-host-scrollbar-vertical-hidden > .os-scrollbar-horizontal {
+    left: 0;
+  }
+
+  .os-theme-dark.os-theme-dark-edgy > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
+    border-radius: 0px;
+  }
+
+  .offset-scrollbars > .os-scrollbar-vertical {
+    top: 35px;
+  }
+
+  .offset-scrollbars > .os-scrollbar-horizontal {
+    left: 15px;
+  }
+}
+
+.separator {
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+#collapseAttributeControls,
+#collapseAwarenessControls {
+  background: #f5f5f5;
+}
+
+.textLight {
+  color: #ffffff !important;
+}
+
+.textDark {
+  color: #000000 !important;
+}
