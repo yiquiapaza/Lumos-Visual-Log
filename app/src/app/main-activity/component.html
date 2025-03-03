@@ -621,6 +621,27 @@
       </as-split>
     </as-split-area>
 
+<!-- COLUMN: Visual Log Panel (New Feature)-->
+      <as-split-area *ngIf="global.appType !== 'CONTROL'" [size]="global.appType !== 'CONTROL' ? 20 : 0">
+          <as-split direction="vertical" class="border-light" restrictMove="true">
+              <as-split-area [size]="100">
+                  <div class="list-group h-100">
+                      <article class="list-group-item">
+                          <!-- TODO: Maybe we need to implement a button configuration-->
+                          <header class="visual-log-header">
+                              <h5>
+                                  <span class="badge badge-secondary">Visual Log</span>
+                              </h5>
+                          </header>
+
+
+                          <!-- Content VISUAL LOG-->
+                      </article>
+                  </div>
+            </as-split-area>
+          </as-split>
+      </as-split-area>
+
     <!-- COLUMN: Awareness Panel -->
     <as-split-area *ngIf="global.appType !== 'CONTROL'" [size]="global.appType !== 'CONTROL' ? 20 : 0">
       <as-split direction="vertical" class="border-light" restrictMove="true">
