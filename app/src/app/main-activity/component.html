@@ -623,20 +623,31 @@
 
 <!-- COLUMN: Visual Log Panel (New Feature)-->
       <as-split-area *ngIf="global.appType !== 'CONTROL'" [size]="global.appType !== 'CONTROL' ? 20 : 0">
-          <as-split direction="vertical" class="border-light" restrictMove="true">
-              <as-split-area [size]="100">
-                  <div class="list-group h-100">
-                      <article class="list-group-item">
-                          <!-- TODO: Maybe we need to implement a button configuration-->
-                          <header class="visual-log-header">
-                              <h5>
-                                  <span class="badge badge-secondary">Visual Log</span>
-                              </h5>
-                          </header>
-
-
-                          <!-- Content VISUAL LOG-->
-                      </article>
+          <as-split direction="vertical" class="border-light" restrictMove="true" class="w-100">
+              <!-- ROW: Visual Log Container-->
+              <as-split-area [size]="100" style="position:relative">
+                    <article style="position: absolute; top: 0; left: 0; border: none; padding: 10px 0 0 10px">
+                        <!-- TODO: Maybe we need to implement a button configuration-->
+                        <header class="visual-log-header">
+                          <table class="w-100 m-b-0">
+                              <tr>
+                                  <td class="p-0 m-0">
+                                      <h5 class="p-0 m-0">
+                                          <span class="badge badge-secondary">Visual Log</span>
+                                      </h5>
+                                  </td>
+                              </tr>
+                          </table>
+                        </header>
+                  </article>
+                  <!-- Content VISUAL LOG-->
+                  <div id="graph_container">
+                  <!--
+                      <h5>
+                          {{ (global.appType).toString() }}
+                          {{ (global.appLevel).toString() }}
+                      </h5>
+                      -->
                   </div>
             </as-split-area>
           </as-split>

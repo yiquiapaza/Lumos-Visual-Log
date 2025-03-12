@@ -18,6 +18,8 @@ import { BarChart } from "../visualizations/main/bar-chart-component";
 import { LineChart } from "../visualizations/main/line-chart-component";
 import { AttributeDistributionPlotConfig } from "../visualizations/awareness/component";
 
+import { VisualLog } from "../visualizations/visual-log/visual-log-component";
+
 window.addEventListener("beforeunload", function (e) {
   // Cancel the event
   e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
@@ -52,6 +54,7 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
   plotWidth: number;
   plotHeight: number;
   plotGroup: any;
+  visualLogInstance: VisualLog;
 
   constructor(
     private route: ActivatedRoute,
@@ -73,6 +76,7 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
     this.dotPlotInstance = createPlotInstance(this, DotPlot);
     this.barChartInstance = createPlotInstance(this, BarChart);
     this.lineChartInstance = createPlotInstance(this, LineChart);
+    this.visualLogInstance = createPlotInstance(this, VisualLog);
     this.route.queryParams.subscribe((params) => {
       if("level" in params){
         this.global.appLevel = params["level"];
@@ -253,6 +257,7 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
       // if switching between datasets, re-initialize existing plot
       //  (otherwise this does nothing)
       initializePlotInstance(context, context.currentPlotType);
+      initializeVisualLogInstance(context);
       context.updateVis();
 
       /** Connect to Server to Send/Receive Messages over WebSocket */
@@ -606,6 +611,11 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
       }
     });
     /* Attribute Distribution Plot - End */
+  }
+
+  updateVisualLogPanel() {
+    let context = this;
+    let dataset = this.appConfig[this.global.appMode];
   }
 
   /**
@@ -1529,6 +1539,12 @@ function initializePlotInstance(context, chartType) {
       console.log(`Invalid plot type '${chartType}'`);
       break;
   }
+}
+
+function initializeVisualLogInstance(context){
+  console.log("++++++++++++++++++++");
+  console.log(context);
+  context.visualLogInstance.initialize();
 }
 
 /**

@@ -67,3 +67,9 @@ export class LineChartConfig {
   focusDivergentColorScale: Function;
   sizeScale: Function;
 }
+
+export class GraphChartConfig {
+  node: Function;
+  link: Function;
+  shape: Function;
+}

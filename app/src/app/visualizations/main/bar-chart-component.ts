@@ -110,8 +110,8 @@ export class BarChart {
         temporal (<tspan style="font-family: 'Font Awesome 5 Free'; font-weight: 800 !important">&#xf133;</tspan>)
       </tspan>
       <tspan x="0" dy="1.2em">
-        attributes, you must have 
-        <tspan style="font-weight: 800 !important">only one</tspan>!
+        attributes, you must have
+      <tspan style="font-weight: 800 !important">only one</tspan>!
       </tspan>`;
   }
 
