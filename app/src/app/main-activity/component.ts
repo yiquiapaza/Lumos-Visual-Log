@@ -259,7 +259,7 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
       initializePlotInstance(context, context.currentPlotType);
       initializeVisualLogInstance(context);
       context.updateVis();
-
+      context.updateVisualLog(context);
       /** Connect to Server to Send/Receive Messages over WebSocket */
       context.chatService.removeAllListenersAndDisconnectFromSocket();
 
@@ -655,6 +655,20 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
         break;
     }
   }
+  updateVisualLog(context) {
+    const dataset = context.appConfig[context.global.appMode];
+    const metaData = {
+      plotType: "",
+      xVar: "",
+      yVar: "",
+    };
+    if (this.currentPlotType !== null && dataset["xVar"] !== null && dataset["yVar"] !== null)  {
+      metaData.plotType = this.currentPlotType;
+      metaData.xVar = dataset["xVar"];
+      metaData.yVar = dataset["yVar"];
+      this.visualLogInstance.update(metaData);
+    }
+  }
 
   /** ======================== INTERFACE METHODS ========================== */
 
@@ -958,8 +972,10 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
    */
   onClickAccordion(attribute) {
     if (this.appConfig[this.global.appMode]["attributes"][attribute]["awarenessPanel"]["isExpanded"]) {
+      console.log("---")
       this.collapseAccordion(attribute);
     } else {
+      console.log("---")
       this.expandAccordion(attribute);
     }
   }
@@ -1175,6 +1191,7 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
     if (updateVis) {
       initializePlotInstance(this, this.currentPlotType);
       this.updateVis();
+      this.updateVisualLog(this);
     }
     if (!reset) {
       /* Prepare and Send New Message - Start */
@@ -1206,7 +1223,9 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
     }
     if (updateVis) {
       initializePlotInstance(this, this.currentPlotType);
+      initializeVisualLogInstance(this);
       this.updateVis();
+      this.updateVisualLog(this);
     }
     if (!reset) {
       /* Prepare and Send New Message - Start */
@@ -1308,6 +1327,7 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
     dataPoint["xVar"] = dataset["xVar"] == null ? null : originalDatasetDict[dataPoint["id"]][dataset["xVar"]];
     dataPoint["yVar"] = dataset["yVar"] == null ? null : originalDatasetDict[dataPoint["id"]][dataset["yVar"]];
     this.utilsService.mouseoverItem(this, event, dataPoint);
+    console.log("-----");
   }
 
   /**
@@ -1320,6 +1340,13 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
     dataPoint["xVar"] = dataset["xVar"] == null ? null : originalDatasetDict[dataPoint["id"]][dataset["xVar"]];
     dataPoint["yVar"] = dataset["yVar"] == null ? null : originalDatasetDict[dataPoint["id"]][dataset["yVar"]];
     this.utilsService.mouseoutItem(this, event, dataPoint);
+    console.log("-----");
+  }
+
+  mouseClick(event, dataPoint) {
+    let dataset = this.appConfig[this.global.appMode];
+    console.log("click mouse");
+    console.log(dataPoint);
   }
 
   /**
@@ -1541,9 +1568,7 @@ function initializePlotInstance(context, chartType) {
   }
 }
 
-function initializeVisualLogInstance(context){
-  console.log("++++++++++++++++++++");
-  console.log(context);
+function initializeVisualLogInstance(context) {
   context.visualLogInstance.initialize();
 }
 

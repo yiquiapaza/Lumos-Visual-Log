@@ -589,7 +589,7 @@
                         class="group-table-item"
                         [ngClass]="{'textLight': dataPoint['ratioTimesVisited'] >= 0.7, 'textDark': dataPoint['ratioTimesVisited'] < 0.7 }"
                         [style.background-color]="dataPoint['color']" (mouseover)="mouseoverRow($event, dataPoint)"
-                        (mouseout)="mouseoutRow($event, dataPoint)">
+                        (mouseout)="mouseoutRow($event, dataPoint)" (mouseup)="mouseClick($event, dataPoint)">
                         <ng-container *ngFor="let attr of appConfig[global.appMode].attributeList">
                           <td *ngIf="attr !== appConfig[global.appMode].labelKey">
                             <div style="text-align: right"

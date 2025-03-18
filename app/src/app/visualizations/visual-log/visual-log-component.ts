@@ -12,6 +12,10 @@ export class VisualLog {
     plotWidth: number;
     plotHeight: number;
     plotGroup;
+    container: any;
+    svg: any;
+    width: number;
+    height: number;
 
 
     constructor(
@@ -26,34 +30,47 @@ export class VisualLog {
 
     initialize() {
         const context = this;
-        const container = "#graph_container";
-        const width = $(container).parent().width();
-        const height = $(container).parent().height();
+        this.container = "#graph_container";
+        this.width = $(this.container).parent().width();
+        this.height = $(this.container).parent().height();
 
-        $(container).empty();
+        $(this.container).empty();
 
-        const svg = d3
-            .select(container)
+        this.svg = d3
+            .select(this.container)
             .append("svg")
-            .attr("width", width)
-            .attr("height", height);
+            .attr("width", this.width)
+            .attr("height", this.height);
 
-        const circles = svg.append("g")
-            .selectAll("circle")
-            .data([{name: "A"}, {name: "B"}, {name: "C"}, {name: "D"}])
-            .enter()
-            .append("circle")
+
+    }
+
+    update(metaData) {
+        const context = this;
+        const elements: Array<object> = [];
+        let utils = context.utilsService;
+        if (metaData !== null) {
+            elements.push(metaData);
+            const circles = this.svg.append("g")
+                .selectAll("circle")
+                .data([{name: "A"}, {name: "B"}, {name: "C"}, {name: "D"}])
+                .enter()
+                .append("circle")
                 .attr("r", 25)
-                .attr("cx", width / 2)
-                .attr("cy", height / 2)
-                .style("fill", "#69b3a2")
+                .attr("cx", this.width / 2)
+                .attr("cy", this.height / 2)
+                .style("fill", "#ffffff")
                 .style("fill-opacity", 0.3)
-                .attr("stroke", "#69a2b2")
-                .style("stroke-width", 4);
+                .attr("stroke", "#000000")
+                .style("stroke-width", 2);
 
-        context.plotGroup = svg
-            .append("g")
-            .classed("plot", true);
+            context.plotGroup = this.svg
+                .append("g")
+                .classed("plot", true);
+        }
+
+        console.log(metaData);
+        console.log(utils);
     }
 }
 

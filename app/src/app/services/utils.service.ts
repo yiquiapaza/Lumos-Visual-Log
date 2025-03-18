@@ -181,6 +181,10 @@ export class UtilsService {
     return message;
   }
 
+  clickAddInteraction(context, event, d){
+    let dataset = context.appConfig[context.global.appMode];
+  }
+
   /**
    * Adds the selected item to an object of selected datapoints.
    */

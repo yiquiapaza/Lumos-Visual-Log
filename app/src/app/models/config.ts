@@ -66,6 +66,10 @@ export const enum InteractionTypes {
   MOUSEOVER_GROUP = "mouseover_group",
   MOUSEOUT_ITEM = "mouseout_item",
   MOUSEOUT_GROUP = "mouseout_group",
+
+  // Visual Log Interactions
+  VS_CLICK_VIS_ITEM = "vs_click_vis_item",
+  VS_ENCODE_VIS = "vs_encode_vis",
 }
 
 /**
