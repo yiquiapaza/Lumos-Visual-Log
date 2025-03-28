@@ -5,6 +5,8 @@ import { GraphChartConfig } from "../../models/viz";
 import {SessionPage} from "../../models/config";
 import {UtilsService} from "src/app/services/utils.service";
 import {ChatService} from "../../services/socket.service";
+import {element} from "protractor";
+import {GraphVisualLog} from "../../models/visualLog";
 
 
 export class VisualLog {
@@ -16,7 +18,9 @@ export class VisualLog {
     svg: any;
     width: number;
     height: number;
+    level: number;
 
+    elements: Array<GraphVisualLog>;
 
     constructor(
         public utilsService: UtilsService,
@@ -26,6 +30,8 @@ export class VisualLog {
         public appConfig
     ) {
         this.graphChartConfig = new GraphChartConfig();
+        this.elements = [];
+        this.level = 1;
     }
 
     initialize() {
@@ -47,19 +53,24 @@ export class VisualLog {
 
     update(metaData) {
         const context = this;
-        const elements: Array<object> = [];
-        let utils = context.utilsService;
-        if (metaData !== null) {
-            elements.push(metaData);
+        this.elements.push({...metaData, color: "red", level: this.level, x: 100, y: 100, radio: 10});
+        console.log(this.elements);
+        let data = [
+            {x: 100, y: 150, r: 20, color: "red", level: 1.0 },
+            {x: 100, y: 150, r: 20, color: "red", level: 1.5 },
+            {x: 100, y: 150, r: 20, color: "red", level: 2 },
+            {x: 100, y: 150, r: 20, color: "red", level: 2.5 },
+        ];
+        if (this.elements) {
             const circles = this.svg.append("g")
                 .selectAll("circle")
-                .data([{name: "A"}, {name: "B"}, {name: "C"}, {name: "D"}])
+                .data(this.elements)
                 .enter()
                 .append("circle")
-                .attr("r", 25)
-                .attr("cx", this.width / 2)
-                .attr("cy", this.height / 2)
-                .style("fill", "#ffffff")
+                .attr("r", (d) => d.radio)
+                .attr("cx", (d) => d.x)
+                .attr("cy", (d) => d.y * d.level)
+                .style("fill", (d) => d.color)
                 .style("fill-opacity", 0.3)
                 .attr("stroke", "#000000")
                 .style("stroke-width", 2);
@@ -67,10 +78,9 @@ export class VisualLog {
             context.plotGroup = this.svg
                 .append("g")
                 .classed("plot", true);
+            this.level = this.level + 0.5;
+            //$(this.container).empty();
         }
-
-        console.log(metaData);
-        console.log(utils);
     }
 }
 

@@ -504,7 +504,7 @@
               </table>
             </header>
           </article>
-          <div id="plot_container"></div>
+          <div id="plot_container" (click)="mouseClick($event)"></div>
         </as-split-area>
 
         <!-- ROW: Selected Object(s) -->
@@ -569,7 +569,7 @@
                   </tr>
                 </table>
               </header>
-
+                <!-- Don't use this component for get data points from the visualization -->
               <!-- Content -->
               <overlay-scrollbars [options]="getDetailsTableScrollbarOptions()" style="padding: 12px 0 0 12px">
                 <div class="group-table"
@@ -589,7 +589,7 @@
                         class="group-table-item"
                         [ngClass]="{'textLight': dataPoint['ratioTimesVisited'] >= 0.7, 'textDark': dataPoint['ratioTimesVisited'] < 0.7 }"
                         [style.background-color]="dataPoint['color']" (mouseover)="mouseoverRow($event, dataPoint)"
-                        (mouseout)="mouseoutRow($event, dataPoint)" (mouseup)="mouseClick($event, dataPoint)">
+                        (mouseout)="mouseoutRow($event, dataPoint)">
                         <ng-container *ngFor="let attr of appConfig[global.appMode].attributeList">
                           <td *ngIf="attr !== appConfig[global.appMode].labelKey">
                             <div style="text-align: right"
@@ -653,276 +653,278 @@
           </as-split>
       </as-split-area>
 
-    <!-- COLUMN: Awareness Panel -->
-    <as-split-area *ngIf="global.appType !== 'CONTROL'" [size]="global.appType !== 'CONTROL' ? 20 : 0">
-      <as-split direction="vertical" class="border-light" restrictMove="true">
-        <!-- ROW: Awareness Panel -->
-        <as-split-area [size]="100">
-          <div class="list-group h-100">
-            <article class="list-group-item">
-              <!-- Header -->
-              <header class="awareness-panel-header">
-                <table class="w-100">
-                  <tr>
-                    <td>
-                      <h5>
-                        <span class="badge badge-secondary">Distribution</span>
-                      </h5>
-                    </td>
-                    <td class="float-right">
-                      <button class="btn btn-light btn-sm" (click)="toggleAwarenessPanelSettingsAccordion()">
-                        <i class="fa fa-cog"></i>
-                      </button>
-                    </td>
-                  </tr>
-                </table>
-              </header>
+<!--&lt;!&ndash; Hide the Awareness Panel (CRL /, to remove comments) &ndash;&gt;-->
+<!--    &lt;!&ndash; COLUMN: Awareness Panel &ndash;&gt;-->
+<!--    <as-split-area *ngIf="global.appType !== 'CONTROL'" [size]="global.appType !== 'CONTROL' ? 20 : 0">-->
+<!--      <as-split direction="vertical" class="border-light" restrictMove="true">-->
+<!--        &lt;!&ndash; ROW: Awareness Panel &ndash;&gt;-->
+<!--        <as-split-area [size]="100">-->
+<!--          <div class="list-group h-100">-->
+<!--            <article class="list-group-item">-->
+<!--              &lt;!&ndash; Header &ndash;&gt;-->
+<!--              <header class="awareness-panel-header">-->
+<!--                <table class="w-100">-->
+<!--                  <tr>-->
+<!--                    <td>-->
+<!--                      <h5>-->
+<!--                        <span class="badge badge-secondary">Distribution</span>-->
+<!--                      </h5>-->
+<!--                    </td>-->
+<!--                    <td class="float-right">-->
+<!--                      <button class="btn btn-light btn-sm" (click)="toggleAwarenessPanelSettingsAccordion()">-->
+<!--                        <i class="fa fa-cog"></i>-->
+<!--                      </button>-->
+<!--                    </td>-->
+<!--                  </tr>-->
+<!--                </table>-->
+<!--              </header>-->
 
-              <!-- Content: Settings -->
-              <div class="collapse" id="collapseAwarenessControls">
-                <div class="m-sm">
-                  <table style="border-collapse: separate; border-spacing: 8px 4px">
-                    <tbody>
-                      <!-- Toggle Accordion -->
-                      <tr>
-                        <td style="float: right">Open/Close</td>
-                        <td>
-                          <!-- Expand Accordion -->
-                          <button (click)="expandAccordion()" class="btn btn-sm btn-light">
-                            <i class="fa fa-chevron-down"></i>
-                          </button>
-                          <!-- Collapse Accordion -->
-                          <button (click)="collapseAccordion()" class="btn btn-sm btn-light">
-                            <i class="fa fa-chevron-up"></i>
-                          </button>
-                        </td>
-                      </tr>
+<!--              &lt;!&ndash; Content: Settings &ndash;&gt;-->
+<!--              <div class="collapse" id="collapseAwarenessControls">-->
+<!--                <div class="m-sm">-->
+<!--                  <table style="border-collapse: separate; border-spacing: 8px 4px">-->
+<!--                    <tbody>-->
+<!--                      &lt;!&ndash; Toggle Accordion &ndash;&gt;-->
+<!--                      <tr>-->
+<!--                        <td style="float: right">Open/Close</td>-->
+<!--                        <td>-->
+<!--                          &lt;!&ndash; Expand Accordion &ndash;&gt;-->
+<!--                          <button (click)="expandAccordion()" class="btn btn-sm btn-light">-->
+<!--                            <i class="fa fa-chevron-down"></i>-->
+<!--                          </button>-->
+<!--                          &lt;!&ndash; Collapse Accordion &ndash;&gt;-->
+<!--                          <button (click)="collapseAccordion()" class="btn btn-sm btn-light">-->
+<!--                            <i class="fa fa-chevron-up"></i>-->
+<!--                          </button>-->
+<!--                        </td>-->
+<!--                      </tr>-->
 
-                      <!-- Sort By Mode -->
-                      <tr *ngIf="global.appType !== 'CONTROL'">
-                        <td style="float: right">Sort by</td>
-                        <td>
-                          <ng-select name="awarenessSortByModeSelect" appendTo="body" [clearable]="false"
-                            [searchable]="false"
-                            [ngStyle]="{ width: getSelectWidth('awarenessSortByModes', 'sortByModeMapping') }"
-                            (change)="onChangeDistributionPanelSort($event)"
-                            [(ngModel)]="userConfig['awarenessSortByMode']">
-                            <ng-option *ngFor="let awsm of userConfig['awarenessSortByModes']" [value]="awsm"
-                              [innerHTML]="userConfig['sortByModeMapping'][awsm]">
-                            </ng-option>
-                          </ng-select>
-                        </td>
-                      </tr>
+<!--                      &lt;!&ndash; Sort By Mode &ndash;&gt;-->
+<!--                      <tr *ngIf="global.appType !== 'CONTROL'">-->
+<!--                        <td style="float: right">Sort by</td>-->
+<!--                        <td>-->
+<!--                          <ng-select name="awarenessSortByModeSelect" appendTo="body" [clearable]="false"-->
+<!--                            [searchable]="false"-->
+<!--                            [ngStyle]="{ width: getSelectWidth('awarenessSortByModes', 'sortByModeMapping') }"-->
+<!--                            (change)="onChangeDistributionPanelSort($event)"-->
+<!--                            [(ngModel)]="userConfig['awarenessSortByMode']">-->
+<!--                            <ng-option *ngFor="let awsm of userConfig['awarenessSortByModes']" [value]="awsm"-->
+<!--                              [innerHTML]="userConfig['sortByModeMapping'][awsm]">-->
+<!--                            </ng-option>-->
+<!--                          </ng-select>-->
+<!--                        </td>-->
+<!--                      </tr>-->
 
-                      <!-- Awareness Mode -->
-                      <tr *ngIf="global.appType != 'CONTROL'">
-                        <td style="float: right">Mode</td>
-                        <td>
-                          <ng-select name="awarenessModeSelect" appendTo="body" [clearable]="false" [searchable]="false"
-                            [ngStyle]="{ width: getSelectWidth('awarenessModes') }"
-                            [(ngModel)]="userConfig['awarenessMode']" (change)="updateAwarenessPanel(null)">
-                            <ng-option *ngFor="let am of userConfig['awarenessModes']" [value]="am"> {{am}} </ng-option>
-                          </ng-select>
-                        </td>
-                      </tr>
+<!--                      &lt;!&ndash; Awareness Mode &ndash;&gt;-->
+<!--                      <tr *ngIf="global.appType != 'CONTROL'">-->
+<!--                        <td style="float: right">Mode</td>-->
+<!--                        <td>-->
+<!--                          <ng-select name="awarenessModeSelect" appendTo="body" [clearable]="false" [searchable]="false"-->
+<!--                            [ngStyle]="{ width: getSelectWidth('awarenessModes') }"-->
+<!--                            [(ngModel)]="userConfig['awarenessMode']" (change)="updateAwarenessPanel(null)">-->
+<!--                            <ng-option *ngFor="let am of userConfig['awarenessModes']" [value]="am"> {{am}} </ng-option>-->
+<!--                          </ng-select>-->
+<!--                        </td>-->
+<!--                      </tr>-->
 
-                      <!-- Color Scale -->
-                      <tr *ngIf="global.appType != 'CONTROL'">
-                        <td style="float: right">Color Scale</td>
-                        <td>
-                          <ng-select name="awarenessColorScaleSelect" appendTo="body" [clearable]="false"
-                            [searchable]="false"
-                            [ngStyle]="{ width: getSelectWidth('colorScales', 'colorScaleMapping') }"
-                            [(ngModel)]="userConfig['awarenessColorScale']">
-                            <ng-option *ngFor="let awcs of userConfig['colorScales']" [value]="awcs">
-                              {{userConfig['colorScaleMapping'][awcs]}}
-                            </ng-option>
-                          </ng-select>
-                        </td>
-                      </tr>
+<!--                      &lt;!&ndash; Color Scale &ndash;&gt;-->
+<!--                      <tr *ngIf="global.appType != 'CONTROL'">-->
+<!--                        <td style="float: right">Color Scale</td>-->
+<!--                        <td>-->
+<!--                          <ng-select name="awarenessColorScaleSelect" appendTo="body" [clearable]="false"-->
+<!--                            [searchable]="false"-->
+<!--                            [ngStyle]="{ width: getSelectWidth('colorScales', 'colorScaleMapping') }"-->
+<!--                            [(ngModel)]="userConfig['awarenessColorScale']">-->
+<!--                            <ng-option *ngFor="let awcs of userConfig['colorScales']" [value]="awcs">-->
+<!--                              {{userConfig['colorScaleMapping'][awcs]}}-->
+<!--                            </ng-option>-->
+<!--                          </ng-select>-->
+<!--                        </td>-->
+<!--                      </tr>-->
 
-                      <!-- Interpolate Mode -->
-                      <tr *ngIf="global.appType != 'CONTROL'">
-                        <td style="float: right">Interpolation</td>
-                        <td>
-                          <ng-select name="interpolateModeSelect" appendTo="body" [clearable]="false"
-                            [searchable]="false" [ngStyle]="{ width: getSelectWidth('interpolateModes') }"
-                            [(ngModel)]="userConfig['interpolateMode']" (change)="updateAwarenessPanel(null)">
-                            <ng-option *ngFor="let im of userConfig['interpolateModes']" [value]="im">
-                              {{im}}
-                            </ng-option>
-                          </ng-select>
-                        </td>
-                      </tr>
+<!--                      &lt;!&ndash; Interpolate Mode &ndash;&gt;-->
+<!--                      <tr *ngIf="global.appType != 'CONTROL'">-->
+<!--                        <td style="float: right">Interpolation</td>-->
+<!--                        <td>-->
+<!--                          <ng-select name="interpolateModeSelect" appendTo="body" [clearable]="false"-->
+<!--                            [searchable]="false" [ngStyle]="{ width: getSelectWidth('interpolateModes') }"-->
+<!--                            [(ngModel)]="userConfig['interpolateMode']" (change)="updateAwarenessPanel(null)">-->
+<!--                            <ng-option *ngFor="let im of userConfig['interpolateModes']" [value]="im">-->
+<!--                              {{im}}-->
+<!--                            </ng-option>-->
+<!--                          </ng-select>-->
+<!--                        </td>-->
+<!--                      </tr>-->
 
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+<!--                    </tbody>-->
+<!--                  </table>-->
+<!--                </div>-->
+<!--              </div>-->
 
-              <!-- Content: Color Legend -->
-              <div *ngIf="global.appType !== 'CONTROL' && userConfig['awarenessColorScale'] == 'Sequential'">
-                <br />
-                <div class="text-center"><span class="title">Data Distribution vs. Your Focus</span></div>
-                <table class="w-100 m-b-md">
-                  <tr>
-                    <td class="title text-secondary" style="white-space: nowrap; padding-right: 8px; font-size: 0.9rem">
-                      Different
-                    </td>
-                    <td class="w-100">
-                      <div class="sequential-color-legend"></div>
-                    </td>
-                    <td class="title text-secondary" style="white-space: nowrap; padding-left: 8px; font-size: 0.9rem">
-                      Similar
-                    </td>
-                  </tr>
-                </table>
-              </div>
-              <div *ngIf="global.appType !== 'CONTROL' && userConfig['awarenessColorScale'] == 'Divergent'">
-                <br />
-                <div class="text-center"><span class="title">Data Distribution vs. Your Focus</span></div>
-                <table class="w-100 m-b-md">
-                  <tr>
-                    <td class="title text-secondary" style="white-space: nowrap; padding-right: 8px; font-size: 0.9rem">
-                      Different
-                    </td>
-                    <td class="w-100">
-                      <div class="divergent-color-legend"></div>
-                    </td>
-                    <td class="title text-secondary" style="white-space: nowrap; padding-left: 8px; font-size: 0.9rem">
-                      Similar
-                    </td>
-                  </tr>
-                </table>
-              </div>
+<!--              &lt;!&ndash; Content: Color Legend &ndash;&gt;-->
+<!--              <div *ngIf="global.appType !== 'CONTROL' && userConfig['awarenessColorScale'] == 'Sequential'">-->
+<!--                <br />-->
+<!--                <div class="text-center"><span class="title">Data Distribution vs. Your Focus</span></div>-->
+<!--                <table class="w-100 m-b-md">-->
+<!--                  <tr>-->
+<!--                    <td class="title text-secondary" style="white-space: nowrap; padding-right: 8px; font-size: 0.9rem">-->
+<!--                      Different-->
+<!--                    </td>-->
+<!--                    <td class="w-100">-->
+<!--                      <div class="sequential-color-legend"></div>-->
+<!--                    </td>-->
+<!--                    <td class="title text-secondary" style="white-space: nowrap; padding-left: 8px; font-size: 0.9rem">-->
+<!--                      Similar-->
+<!--                    </td>-->
+<!--                  </tr>-->
+<!--                </table>-->
+<!--              </div>-->
+<!--              <div *ngIf="global.appType !== 'CONTROL' && userConfig['awarenessColorScale'] == 'Divergent'">-->
+<!--                <br />-->
+<!--                <div class="text-center"><span class="title">Data Distribution vs. Your Focus</span></div>-->
+<!--                <table class="w-100 m-b-md">-->
+<!--                  <tr>-->
+<!--                    <td class="title text-secondary" style="white-space: nowrap; padding-right: 8px; font-size: 0.9rem">-->
+<!--                      Different-->
+<!--                    </td>-->
+<!--                    <td class="w-100">-->
+<!--                      <div class="divergent-color-legend"></div>-->
+<!--                    </td>-->
+<!--                    <td class="title text-secondary" style="white-space: nowrap; padding-left: 8px; font-size: 0.9rem">-->
+<!--                      Similar-->
+<!--                    </td>-->
+<!--                  </tr>-->
+<!--                </table>-->
+<!--              </div>-->
 
-              <!-- Content: Cards -->
-              <div class="awareness-panel-body">
-                <!-- ROW: Bookmarks -->
-                <div id="bookmarkedAttributes">
-                  <!-- Header -->
-                  <table class="w-100">
-                    <tr>
-                      <td>
-                        <h6 class="title">Pinned Attributes</h6>
-                      </td>
-                      <td class="float-right">
-                        <button class="btn btn-light btn-sm" (click)="resetAllBookmarks($event)">
-                          <i class="fa fa-times"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </table>
+<!--              &lt;!&ndash; Content: Cards &ndash;&gt;-->
+<!--              <div class="awareness-panel-body">-->
+<!--                &lt;!&ndash; ROW: Bookmarks &ndash;&gt;-->
+<!--                <div id="bookmarkedAttributes">-->
+<!--                  &lt;!&ndash; Header &ndash;&gt;-->
+<!--                  <table class="w-100">-->
+<!--                    <tr>-->
+<!--                      <td>-->
+<!--                        <h6 class="title">Pinned Attributes</h6>-->
+<!--                      </td>-->
+<!--                      <td class="float-right">-->
+<!--                        <button class="btn btn-light btn-sm" (click)="resetAllBookmarks($event)">-->
+<!--                          <i class="fa fa-times"></i>-->
+<!--                        </button>-->
+<!--                      </td>-->
+<!--                    </tr>-->
+<!--                  </table>-->
 
-                  <!-- Content -->
-                  <div>
-                    <div *ngFor="let a of customSortAwarenessPanel(appConfig[global.appMode].attributeList);">
-                      <div class="card card-border"
-                        *ngIf="appConfig[global.appMode]['attributes'][a]['awarenessPanel']['isBookmarked']">
-                        <div class="card-header card-header-hover m-b-0" [ngStyle]="styleAwarenessPanelCard(a)"
-                          [attr.aria-expanded]="true">
-                          <table class="w-100">
-                            <tr>
-                              <td class="float-left"
-                                *ngIf="appConfig[global.appMode].attributeDatatypeList['N'].indexOf(a) !== -1">
-                                <span class="text-nowrap"><i class="fa fa-font"></i>&nbsp;&nbsp;{{a}}</span>
-                              </td>
-                              <td class="float-left"
-                                *ngIf="appConfig[global.appMode].attributeDatatypeList['O'].indexOf(a) !== -1">
-                                <span class="text-nowrap"><i class="fa fa-font"></i>&nbsp;&nbsp;{{a}}</span>
-                              </td>
-                              <td class="float-left"
-                                *ngIf="appConfig[global.appMode].attributeDatatypeList['T'].indexOf(a) !== -1">
-                                <span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{a}}</span>
-                              </td>
-                              <td class="float-left"
-                                *ngIf="appConfig[global.appMode].attributeDatatypeList['Q'].indexOf(a) !== -1">
-                                <span class="text-nowrap"><i class="fa fa-hashtag"></i>&nbsp;&nbsp;{{a}}</span>
-                              </td>
-                              <td class="float-right">
-                                <button (click)="toggleBookmark(a, $event)" class="btn btn-sm p-0">
-                                  <i class="fas fa-bookmark"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          </table>
-                        </div>
-                        <div class="card-body">
-                          <div class="awarenessPlot"
-                            id="{{'awarenessPlot-' + appConfig[global.appMode]['attributes'][a]['cleaned']}}"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+<!--                  &lt;!&ndash; Content &ndash;&gt;-->
+<!--                  <div>-->
+<!--                    <div *ngFor="let a of customSortAwarenessPanel(appConfig[global.appMode].attributeList);">-->
+<!--                      <div class="card card-border"-->
+<!--                        *ngIf="appConfig[global.appMode]['attributes'][a]['awarenessPanel']['isBookmarked']">-->
+<!--                        <div class="card-header card-header-hover m-b-0" [ngStyle]="styleAwarenessPanelCard(a)"-->
+<!--                          [attr.aria-expanded]="true">-->
+<!--                          <table class="w-100">-->
+<!--                            <tr>-->
+<!--                              <td class="float-left"-->
+<!--                                *ngIf="appConfig[global.appMode].attributeDatatypeList['N'].indexOf(a) !== -1">-->
+<!--                                <span class="text-nowrap"><i class="fa fa-font"></i>&nbsp;&nbsp;{{a}}</span>-->
+<!--                              </td>-->
+<!--                              <td class="float-left"-->
+<!--                                *ngIf="appConfig[global.appMode].attributeDatatypeList['O'].indexOf(a) !== -1">-->
+<!--                                <span class="text-nowrap"><i class="fa fa-font"></i>&nbsp;&nbsp;{{a}}</span>-->
+<!--                              </td>-->
+<!--                              <td class="float-left"-->
+<!--                                *ngIf="appConfig[global.appMode].attributeDatatypeList['T'].indexOf(a) !== -1">-->
+<!--                                <span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{a}}</span>-->
+<!--                              </td>-->
+<!--                              <td class="float-left"-->
+<!--                                *ngIf="appConfig[global.appMode].attributeDatatypeList['Q'].indexOf(a) !== -1">-->
+<!--                                <span class="text-nowrap"><i class="fa fa-hashtag"></i>&nbsp;&nbsp;{{a}}</span>-->
+<!--                              </td>-->
+<!--                              <td class="float-right">-->
+<!--                                <button (click)="toggleBookmark(a, $event)" class="btn btn-sm p-0">-->
+<!--                                  <i class="fas fa-bookmark"></i>-->
+<!--                                </button>-->
+<!--                              </td>-->
+<!--                            </tr>-->
+<!--                          </table>-->
+<!--                        </div>-->
+<!--                        <div class="card-body">-->
+<!--                          <div class="awarenessPlot"-->
+<!--                            id="{{'awarenessPlot-' + appConfig[global.appMode]['attributes'][a]['cleaned']}}"></div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
 
-                <hr class="separator" />
+<!--                <hr class="separator" />-->
 
-                <!-- ROW: Others -->
-                <div id="otherAttributes" class="mb-sm">
-                  <!-- Header -->
-                  <table class="w-100">
-                    <tr>
-                      <td>
-                        <h6 class="title">Other Attributes</h6>
-                      </td>
-                    </tr>
-                  </table>
+<!--                &lt;!&ndash; ROW: Others &ndash;&gt;-->
+<!--                <div id="otherAttributes" class="mb-sm">-->
+<!--                  &lt;!&ndash; Header &ndash;&gt;-->
+<!--                  <table class="w-100">-->
+<!--                    <tr>-->
+<!--                      <td>-->
+<!--                        <h6 class="title">Other Attributes</h6>-->
+<!--                      </td>-->
+<!--                    </tr>-->
+<!--                  </table>-->
 
-                  <!-- Content -->
-                  <div class="accordion" id="awarenessaccordion">
-                    <div *ngFor="let a of customSortAwarenessPanel(appConfig[global.appMode].attributeList);">
-                      <div class="card"
-                        [ngClass]="{'card-border': this.appConfig[this.global.appMode]['attributes'][a]['awarenessPanel']['isExpanded']}"
-                        *ngIf="!appConfig[global.appMode]['attributes'][a]['awarenessPanel']['isBookmarked']">
-                        <div class="card-header card-header-hover m-b-0"
-                          title="{{appConfig[global.appMode]['attributeBiasValues'][a]}}"
-                          [ngStyle]="styleAwarenessPanelCard(a)"
-                          id="{{'awarenessheading-' + appConfig[global.appMode]['attributes'][a]['cleaned']}}"
-                          (click)="onClickAccordion(a)"
-                          [attr.data-target]="'#awarenesscollapse-' + appConfig[global.appMode]['attributes'][a]['cleaned']">
-                          <table class="w-100">
-                            <tr>
-                              <td class="float-left"
-                                *ngIf="appConfig[global.appMode].attributeDatatypeList['N'].indexOf(a) !== -1">
-                                <span class="text-nowrap"><i class="fa fa-font"></i>&nbsp;&nbsp;{{a}}</span>
-                              </td>
-                              <td class="float-left"
-                                *ngIf="appConfig[global.appMode].attributeDatatypeList['O'].indexOf(a) !== -1">
-                                <span class="text-nowrap"><i class="fa fa-font"></i>&nbsp;&nbsp;{{a}}</span>
-                              </td>
-                              <td class="float-left"
-                                *ngIf="appConfig[global.appMode].attributeDatatypeList['T'].indexOf(a) !== -1">
-                                <span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{a}}</span>
-                              </td>
-                              <td class="float-left"
-                                *ngIf="appConfig[global.appMode].attributeDatatypeList['Q'].indexOf(a) !== -1">
-                                <span class="text-nowrap"><i class="fa fa-hashtag"></i>&nbsp;&nbsp;{{a}}</span>
-                              </td>
-                              <td class="float-right">
-                                &nbsp;<button (click)="toggleBookmark(a, $event)" class="btn btn-sm p-0">
-                                  <i class="fa-bookmark"
-                                    [ngClass]="{'fas': appConfig[global['appMode']]['attributes'][a]['awarenessPanel']['isBookmarked'], 'far': !appConfig[global['appMode']]['attributes'][a]['awarenessPanel']['isBookmarked']}"></i></button>&nbsp;
-                              </td>
-                            </tr>
-                          </table>
-                        </div>
-                        <div class="collapse"
-                          id="{{'awarenesscollapse-' + appConfig[global.appMode]['attributes'][a]['cleaned']}}">
-                          <div class="card-body">
-                            <div class="awarenessPlot"
-                              id="{{'awarenessPlot-' + appConfig[global.appMode]['attributes'][a]['cleaned']}}"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </as-split-area>
-      </as-split>
-    </as-split-area>
+<!--                  &lt;!&ndash; Content &ndash;&gt;-->
+<!--                  <div class="accordion" id="awarenessaccordion">-->
+<!--                    <div *ngFor="let a of customSortAwarenessPanel(appConfig[global.appMode].attributeList);">-->
+<!--                      <div class="card"-->
+<!--                        [ngClass]="{'card-border': this.appConfig[this.global.appMode]['attributes'][a]['awarenessPanel']['isExpanded']}"-->
+<!--                        *ngIf="!appConfig[global.appMode]['attributes'][a]['awarenessPanel']['isBookmarked']">-->
+<!--                        <div class="card-header card-header-hover m-b-0"-->
+<!--                          title="{{appConfig[global.appMode]['attributeBiasValues'][a]}}"-->
+<!--                          [ngStyle]="styleAwarenessPanelCard(a)"-->
+<!--                          id="{{'awarenessheading-' + appConfig[global.appMode]['attributes'][a]['cleaned']}}"-->
+<!--                          (click)="onClickAccordion(a)"-->
+<!--                          [attr.data-target]="'#awarenesscollapse-' + appConfig[global.appMode]['attributes'][a]['cleaned']">-->
+<!--                          <table class="w-100">-->
+<!--                            <tr>-->
+<!--                              <td class="float-left"-->
+<!--                                *ngIf="appConfig[global.appMode].attributeDatatypeList['N'].indexOf(a) !== -1">-->
+<!--                                <span class="text-nowrap"><i class="fa fa-font"></i>&nbsp;&nbsp;{{a}}</span>-->
+<!--                              </td>-->
+<!--                              <td class="float-left"-->
+<!--                                *ngIf="appConfig[global.appMode].attributeDatatypeList['O'].indexOf(a) !== -1">-->
+<!--                                <span class="text-nowrap"><i class="fa fa-font"></i>&nbsp;&nbsp;{{a}}</span>-->
+<!--                              </td>-->
+<!--                              <td class="float-left"-->
+<!--                                *ngIf="appConfig[global.appMode].attributeDatatypeList['T'].indexOf(a) !== -1">-->
+<!--                                <span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{a}}</span>-->
+<!--                              </td>-->
+<!--                              <td class="float-left"-->
+<!--                                *ngIf="appConfig[global.appMode].attributeDatatypeList['Q'].indexOf(a) !== -1">-->
+<!--                                <span class="text-nowrap"><i class="fa fa-hashtag"></i>&nbsp;&nbsp;{{a}}</span>-->
+<!--                              </td>-->
+<!--                              <td class="float-right">-->
+<!--                                &nbsp;<button (click)="toggleBookmark(a, $event)" class="btn btn-sm p-0">-->
+<!--                                  <i class="fa-bookmark"-->
+<!--                                    [ngClass]="{'fas': appConfig[global['appMode']]['attributes'][a]['awarenessPanel']['isBookmarked'], 'far': !appConfig[global['appMode']]['attributes'][a]['awarenessPanel']['isBookmarked']}"></i></button>&nbsp;-->
+<!--                              </td>-->
+<!--                            </tr>-->
+<!--                          </table>-->
+<!--                        </div>-->
+<!--                        <div class="collapse"-->
+<!--                          id="{{'awarenesscollapse-' + appConfig[global.appMode]['attributes'][a]['cleaned']}}">-->
+<!--                          <div class="card-body">-->
+<!--                            <div class="awarenessPlot"-->
+<!--                              id="{{'awarenessPlot-' + appConfig[global.appMode]['attributes'][a]['cleaned']}}"></div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </article>-->
+<!--          </div>-->
+<!--        </as-split-area>-->
+<!--      </as-split>-->
+<!--    </as-split-area>-->
+
   </as-split>
 </div>

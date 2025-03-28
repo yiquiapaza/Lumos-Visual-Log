@@ -73,3 +73,4 @@ export class GraphChartConfig {
   link: Function;
   shape: Function;
 }
+

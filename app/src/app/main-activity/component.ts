@@ -19,6 +19,8 @@ import { LineChart } from "../visualizations/main/line-chart-component";
 import { AttributeDistributionPlotConfig } from "../visualizations/awareness/component";
 
 import { VisualLog } from "../visualizations/visual-log/visual-log-component";
+import {NodeVisualLog, VisualizationElement} from "../models/visualLog";
+
 
 window.addEventListener("beforeunload", function (e) {
   // Cancel the event
@@ -655,17 +657,19 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
         break;
     }
   }
-  updateVisualLog(context) {
+  updateVisualLog(context, element = "") {
     const dataset = context.appConfig[context.global.appMode];
-    const metaData = {
+    const metaData: NodeVisualLog = {
       plotType: "",
       xVar: "",
       yVar: "",
+      element: "",
     };
-    if (this.currentPlotType !== null && dataset["xVar"] !== null && dataset["yVar"] !== null)  {
+    if (this.currentPlotType !== null && dataset["xVar"] !== null && dataset["yVar"] !== null && element)  {
       metaData.plotType = this.currentPlotType;
       metaData.xVar = dataset["xVar"];
       metaData.yVar = dataset["yVar"];
+      metaData.element = element;
       this.visualLogInstance.update(metaData);
     }
   }
@@ -972,10 +976,8 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
    */
   onClickAccordion(attribute) {
     if (this.appConfig[this.global.appMode]["attributes"][attribute]["awarenessPanel"]["isExpanded"]) {
-      console.log("---")
       this.collapseAccordion(attribute);
     } else {
-      console.log("---")
       this.expandAccordion(attribute);
     }
   }
@@ -1327,7 +1329,6 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
     dataPoint["xVar"] = dataset["xVar"] == null ? null : originalDatasetDict[dataPoint["id"]][dataset["xVar"]];
     dataPoint["yVar"] = dataset["yVar"] == null ? null : originalDatasetDict[dataPoint["id"]][dataset["yVar"]];
     this.utilsService.mouseoverItem(this, event, dataPoint);
-    console.log("-----");
   }
 
   /**
@@ -1340,13 +1341,18 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
     dataPoint["xVar"] = dataset["xVar"] == null ? null : originalDatasetDict[dataPoint["id"]][dataset["xVar"]];
     dataPoint["yVar"] = dataset["yVar"] == null ? null : originalDatasetDict[dataPoint["id"]][dataset["yVar"]];
     this.utilsService.mouseoutItem(this, event, dataPoint);
-    console.log("-----");
   }
 
-  mouseClick(event, dataPoint) {
+  /**
+   * Get the metadata and just send a value if the element is circle
+   * bar, or line.
+   */
+  mouseClick(event) {
     let dataset = this.appConfig[this.global.appMode];
-    console.log("click mouse");
-    console.log(dataPoint);
+    if (event.target.nodeName === VisualizationElement.CIRCLE || event.target.nodeName === VisualizationElement.RECT || event.target.nodeName === VisualizationElement.LINE) {
+      this.updateVisualLog(this, event.target.nodeName);
+      console.log("click mouse");
+    }
   }
 
   /**
