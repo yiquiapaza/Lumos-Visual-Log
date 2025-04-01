@@ -659,12 +659,13 @@ export class MainActivityComponent implements OnInit, AfterViewInit {
   }
   updateVisualLog(context, element = "") {
     const dataset = context.appConfig[context.global.appMode];
-    const metaData: NodeVisualLog = {
-      plotType: "",
-      xVar: "",
-      yVar: "",
-      element: "",
-    };
+    const metaData: NodeVisualLog = {};
+    // const metaData: NodeVisualLog = {
+    //   plotType: "",
+    //   xVar: "",
+    //   yVar: "",
+    //   element: "",
+    // };
     if (this.currentPlotType !== null && dataset["xVar"] !== null && dataset["yVar"] !== null && element)  {
       metaData.plotType = this.currentPlotType;
       metaData.xVar = dataset["xVar"];

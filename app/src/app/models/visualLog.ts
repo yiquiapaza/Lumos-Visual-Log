@@ -5,10 +5,10 @@ export const enum VisualizationElement {
 }
 
 export interface NodeVisualLog {
-    plotType: string;
-    xVar: string;
-    yVar: string;
-    element: string;
+    plotType?: string;
+    xVar?: string;
+    yVar?: string;
+    element?: string;
 }
 
 export interface GraphVisualLog {
