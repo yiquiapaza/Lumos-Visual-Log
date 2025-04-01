@@ -55,13 +55,8 @@ export class VisualLog {
         const context = this;
         this.elements.push({...metaData, color: "red", level: this.level, x: 100, y: 100, radio: 10});
         console.log(this.elements);
-        let data = [
-            {x: 100, y: 150, r: 20, color: "red", level: 1.0 },
-            {x: 100, y: 150, r: 20, color: "red", level: 1.5 },
-            {x: 100, y: 150, r: 20, color: "red", level: 2 },
-            {x: 100, y: 150, r: 20, color: "red", level: 2.5 },
-        ];
         if (this.elements) {
+            this.svg.selectAll("*").remove();
             const circles = this.svg.append("g")
                 .selectAll("circle")
                 .data(this.elements)
