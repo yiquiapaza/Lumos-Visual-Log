@@ -6,7 +6,7 @@ import {SessionPage} from "../../models/config";
 import {UtilsService} from "src/app/services/utils.service";
 import {ChatService} from "../../services/socket.service";
 import {element} from "protractor";
-import {GraphVisualLog} from "../../models/visualLog";
+import {GraphVisualLog, LinksVisualLog} from "../../models/visualLog";
 
 
 export class VisualLog {
@@ -19,6 +19,10 @@ export class VisualLog {
     width: number;
     height: number;
     level: number;
+    id: number;
+
+    xScale: any;
+    yScale: any;
 
     elements: Array<GraphVisualLog>;
 
@@ -32,6 +36,7 @@ export class VisualLog {
         this.graphChartConfig = new GraphChartConfig();
         this.elements = [];
         this.level = 1;
+        this.id = 0;
     }
 
     initialize() {
@@ -48,34 +53,96 @@ export class VisualLog {
             .attr("width", this.width)
             .attr("height", this.height);
 
+        this.xScale = d3.scaleLinear()
+            .domain([0, this.width])
+            .range([0, this.width]);
+
+        this.yScale = d3.scaleLinear()
+            .domain([0, this.height])
+            .range([0, this.height]);
 
     }
 
     update(metaData) {
         const context = this;
-        this.elements.push({...metaData, color: "red", level: this.level, x: 100, y: 100, radio: 10});
+        this.elements.push({...metaData, color: "red", level: this.level, x: 100, y: 100, radio: 10, id: this.id});
+        const linksData = [
+            { source: 0, target: 1, color: "red", width: 2 },
+            { source: 1, target: 2, color: "purple", width: 3 },
+            { source: 2, target: 3, color: "teal", width: 1 }
+        ];
+        const linksData1 = this.createLinks(this.id);
+        console.log("linsksData1", linksData1);
         console.log(this.elements);
         if (this.elements) {
             this.svg.selectAll("*").remove();
-            const circles = this.svg.append("g")
-                .selectAll("circle")
+            const nodes = this.svg.append("g")
+                .selectAll(".node")
                 .data(this.elements)
                 .enter()
                 .append("circle")
+                .attr("class", "node")
                 .attr("r", (d) => d.radio)
-                .attr("cx", (d) => d.x)
-                .attr("cy", (d) => d.y * d.level)
+                .attr("cx", (d) => this.xScale(d.x))
+                .attr("cy", (d) => this.yScale(d.y * d.level))
                 .style("fill", (d) => d.color)
                 .style("fill-opacity", 0.3)
                 .attr("stroke", "#000000")
                 .style("stroke-width", 2);
+            if (linksData.length > 1) {
+                const links = this.svg.selectAll(".link")
+                    .data(linksData1)
+                    .enter()
+                    .append("line")
+                    .attr("class", "link")
+                    .style("stroke", (d) => d.color)
+                    .style("stroke-width", (d) => d.width)
+                    .attr("x1", (d) => {
+                        const sourceNode = this.elements.find((node) => node.id === d.source);
+                        console.log("sourceNodeX", sourceNode.x);
+                        return sourceNode ? sourceNode.x : 0;
+                    })
+                    .attr("y1", (d) => {
+                        const sourceNode = this.elements.find((node) => node.id === d.source);
+                        console.log("sourceNodeY", sourceNode.y);
+                        return sourceNode ? sourceNode.y + 20 : 0;
+                    })
+                    .attr("x2", (d) => {
+                        const targetNode = this.elements.find((node) => node.id === d.target);
+                        console.log("targetNodeX", targetNode.x);
+                        return targetNode ? targetNode.x : 0;
+                    })
+                    .attr("y2", (d) => {
+                        const targetNode = this.elements.find((node) => node.id === d.target);
+                        console.log("targetNodeY", targetNode.y);
+                        return targetNode ? targetNode.y + 20 : 0;
+                    });
+            }
 
             context.plotGroup = this.svg
                 .append("g")
                 .classed("plot", true);
             this.level = this.level + 0.5;
+            this.id++;
             //$(this.container).empty();
         }
+    }
+
+    createLinks(index: number): LinksVisualLog[] {
+        const ListLinks: LinksVisualLog[] = [];
+        if (index > 0) {
+            for (let i = 0; index >= i ; i++) {
+                const link: LinksVisualLog = {
+                    source: i,
+                    target: i + 1,
+                    color: "black",
+                    width: 2
+                };
+                ListLinks.push(link);
+            }
+            return ListLinks;
+        }
+        return ListLinks;
     }
 }
 

@@ -21,4 +21,12 @@ export interface GraphVisualLog {
     y: number;
     color: string;
     level: number;
+    id: number;
+}
+
+export interface LinksVisualLog {
+    source: number;
+    target: number;
+    color: string;
+    width: number;
 }
