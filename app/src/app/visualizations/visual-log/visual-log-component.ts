@@ -124,7 +124,7 @@ export class VisualLog {
                 .classed("plot", true);
             this.level = this.level + 0.5;
             this.id++;
-            //$(this.container).empty();
+            // $(this.container).empty();
         }
     }
 
