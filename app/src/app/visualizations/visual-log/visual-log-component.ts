@@ -24,6 +24,9 @@ export class VisualLog {
     xScale: any;
     yScale: any;
 
+    circlePosiY: number;
+    circlePosiX: number;
+
     elements: Array<GraphVisualLog>;
 
     constructor(
@@ -37,6 +40,8 @@ export class VisualLog {
         this.elements = [];
         this.level = 1;
         this.id = 0;
+        this.circlePosiY = 100;
+        this.circlePosiX = 100;
     }
 
     initialize() {
@@ -65,7 +70,15 @@ export class VisualLog {
 
     update(metaData) {
         const context = this;
-        this.elements.push({...metaData, color: "red", level: this.level, x: 100, y: 100, radio: 10, id: this.id});
+        this.elements.push({
+            ...metaData,
+            color: "red",
+            level: this.level,
+            x: this.circlePosiX,
+            y: this.circlePosiY,
+            radio: 10,
+            id: this.id
+        });
         const linksData = [
             {source: 0, target: 1, color: "red", width: 2},
             {source: 1, target: 2, color: "purple", width: 3},
@@ -84,7 +97,7 @@ export class VisualLog {
                 .attr("class", "node")
                 .attr("r", (d) => d.radio)
                 .attr("cx", (d) => this.xScale(d.x))
-                .attr("cy", (d) => this.yScale(d.y * d.level))
+                .attr("cy", (d) => this.yScale(d.y))
                 .style("fill", (d) => d.color)
                 .style("fill-opacity", 0.3)
                 .attr("stroke", "#000000")
@@ -114,7 +127,7 @@ export class VisualLog {
                         console.log("targetNodeX", targetNode.x);
                         return targetNode.x;
                     } else {
-                        return 0;
+                        return this.circlePosiX;
                     }
                 })
                 .attr("y2", (d) => {
@@ -124,7 +137,7 @@ export class VisualLog {
                         console.log("targetNodeY", targetNode.y);
                         return targetNode.y;
                     } else {
-                        return 0;
+                        return this.circlePosiY;
                     }
                 });
 
@@ -132,6 +145,7 @@ export class VisualLog {
                 .append("g")
                 .classed("plot", true);
             this.level = this.level + 0.5;
+            this.circlePosiY = this.circlePosiY + 30;
             this.id++;
             // $(this.container).empty();
         }
