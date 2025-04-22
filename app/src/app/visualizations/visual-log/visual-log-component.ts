@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import $ from "jquery";
 
-import { GraphChartConfig } from "../../models/viz";
+import {GraphChartConfig} from "../../models/viz";
 import {SessionPage} from "../../models/config";
 import {UtilsService} from "src/app/services/utils.service";
 import {ChatService} from "../../services/socket.service";
@@ -67,12 +67,12 @@ export class VisualLog {
         const context = this;
         this.elements.push({...metaData, color: "red", level: this.level, x: 100, y: 100, radio: 10, id: this.id});
         const linksData = [
-            { source: 0, target: 1, color: "red", width: 2 },
-            { source: 1, target: 2, color: "purple", width: 3 },
-            { source: 2, target: 3, color: "teal", width: 1 }
+            {source: 0, target: 1, color: "red", width: 2},
+            {source: 1, target: 2, color: "purple", width: 3},
+            {source: 2, target: 3, color: "teal", width: 1}
         ];
         const linksData1 = this.createLinks(this.id);
-        console.log("linsksData1", linksData1);
+        console.log("Links Data", linksData1);
         console.log(this.elements);
         if (this.elements) {
             this.svg.selectAll("*").remove();
@@ -89,35 +89,44 @@ export class VisualLog {
                 .style("fill-opacity", 0.3)
                 .attr("stroke", "#000000")
                 .style("stroke-width", 2);
-            if (linksData.length > 1) {
-                const links = this.svg.selectAll(".link")
-                    .data(linksData1)
-                    .enter()
-                    .append("line")
-                    .attr("class", "link")
-                    .style("stroke", (d) => d.color)
-                    .style("stroke-width", (d) => d.width)
-                    .attr("x1", (d) => {
-                        const sourceNode = this.elements.find((node) => node.id === d.source);
-                        console.log("sourceNodeX", sourceNode.x);
-                        return sourceNode ? sourceNode.x : 0;
-                    })
-                    .attr("y1", (d) => {
-                        const sourceNode = this.elements.find((node) => node.id === d.source);
-                        console.log("sourceNodeY", sourceNode.y);
-                        return sourceNode ? sourceNode.y + 20 : 0;
-                    })
-                    .attr("x2", (d) => {
-                        const targetNode = this.elements.find((node) => node.id === d.target);
+
+            const links = this.svg.append("g")
+                .selectAll(".link")
+                .data(linksData1)
+                .enter()
+                .append("line")
+                .attr("class", "link")
+                .style("stroke", (d) => d.color)
+                .style("stroke-width", (d) => d.width)
+                .attr("x1", (d) => {
+                    const sourceNode = this.elements.find((node) => node.id === d.source);
+                    console.log("sourceNodeX", sourceNode.x);
+                    return sourceNode ? sourceNode.x : 0;
+                })
+                .attr("y1", (d) => {
+                    const sourceNode = this.elements.find((node) => node.id === d.source);
+                    console.log("sourceNodeY", sourceNode.y);
+                    return sourceNode ? sourceNode.y : 0;
+                })
+                .attr("x2", (d) => {
+                    const targetNode = this.elements.find((node) => node.id === d.target);
+                    if (targetNode) {
                         console.log("targetNodeX", targetNode.x);
-                        return targetNode ? targetNode.x : 0;
-                    })
-                    .attr("y2", (d) => {
-                        const targetNode = this.elements.find((node) => node.id === d.target);
+                        return targetNode.x;
+                    } else {
+                        return 0;
+                    }
+                })
+                .attr("y2", (d) => {
+                    console.log("element", d);
+                    const targetNode = this.elements.find((node) => node.id === d.target);
+                    if (targetNode) {
                         console.log("targetNodeY", targetNode.y);
-                        return targetNode ? targetNode.y + 20 : 0;
-                    });
-            }
+                        return targetNode.y;
+                    } else {
+                        return 0;
+                    }
+                });
 
             context.plotGroup = this.svg
                 .append("g")
@@ -130,17 +139,14 @@ export class VisualLog {
 
     createLinks(index: number): LinksVisualLog[] {
         const ListLinks: LinksVisualLog[] = [];
-        if (index > 0) {
-            for (let i = 0; index >= i ; i++) {
-                const link: LinksVisualLog = {
-                    source: i,
-                    target: i + 1,
-                    color: "black",
-                    width: 2
-                };
-                ListLinks.push(link);
-            }
-            return ListLinks;
+        for (let i = 0; index >= i; i++) {
+            const link: LinksVisualLog = {
+                source: i,
+                target: i + 1,
+                color: "black",
+                width: 2
+            };
+            ListLinks.push(link);
         }
         return ListLinks;
     }
