@@ -6,7 +6,7 @@ import {SessionPage} from "../../models/config";
 import {UtilsService} from "src/app/services/utils.service";
 import {ChatService} from "../../services/socket.service";
 import {element} from "protractor";
-import {GraphVisualLog, LinksVisualLog} from "../../models/visualLog";
+import {GraphVisualLog, LinksVisualLog, NodeVisualLog} from "../../models/visualLog";
 
 
 export class VisualLog {
@@ -68,9 +68,9 @@ export class VisualLog {
 
     }
 
-    update(metaData) {
+    update(metaData: NodeVisualLog) {
         const context = this;
-        this.elements.push({
+        const tmpElement = {
             ...metaData,
             color: "red",
             level: this.level,
@@ -78,7 +78,8 @@ export class VisualLog {
             y: this.circlePosiY,
             radio: 10,
             id: this.id
-        });
+        } as GraphVisualLog;
+        this.elements.push(tmpElement);
         const linksData = [
             {source: 0, target: 1, color: "red", width: 2},
             {source: 1, target: 2, color: "purple", width: 3},
@@ -93,15 +94,28 @@ export class VisualLog {
                 .selectAll(".node")
                 .data(this.elements)
                 .enter()
-                .append("circle")
-                .attr("class", "node")
-                .attr("r", (d) => d.radio)
-                .attr("cx", (d) => this.xScale(d.x))
-                .attr("cy", (d) => this.yScale(d.y))
-                .style("fill", (d) => d.color)
+                .append((d) => document.createElementNS("http://www.w3.org/2000/svg", d.element))
                 .style("fill-opacity", 0.3)
+                .attr("class", "node")
                 .attr("stroke", "#000000")
-                .style("stroke-width", 2);
+                .style("stroke-width", 2)
+                .each(function(d) {
+                    console.log("d", d);
+                    const selection = d3.select(this);
+                    if (d.element === "circle") {
+                        // selection.append("circle")
+                        selection.attr("r", d.radio)
+                            .attr("cx", d.x)
+                            .attr("cy", d.y)
+                            .style("fill", d.color);
+                    } else if (d.element === "rect") {
+                        selection.attr("x", d.x - (20 / 2))
+                            .attr("y", d.y - (20 / 2))
+                            .attr("width", 20)
+                            .attr("height", 20)
+                            .style("fill", d.color);
+                    }
+                });
 
             const links = this.svg.append("g")
                 .selectAll(".link")
